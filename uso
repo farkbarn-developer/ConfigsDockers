@@ -1,0 +1,3 @@
+docker-compose up #uso normal
+docker-compose up -d #uso liberando la consola
+docker-compose down #matar proceso
