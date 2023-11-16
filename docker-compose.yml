@@ -1,0 +1,40 @@
+version: "3.9"
+    
+services:
+  db:
+    image: mysql:5.7
+    volumes:
+      - db_data:/var/lib/mysql #Funciona Bien
+      #- ./mysql_data:/var/lib/mysql #Funciona pero no guarda datos fuera del contenedor
+      #- './mysql_data:/var/lib/mysql' #Probando Almacenamiento
+      #- ${PWD}/db:/var/lib/mysql
+      #- ${PWD}/mysql:/var/lib/mysql
+      #- ${PWD}/db.db:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: somewordpress
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+    
+  wordpress:
+    depends_on:
+      - db
+    image: wordpress:latest
+    volumes:
+      - wordpress_data:/var/www/html
+#Inicio Nueva Linea proyectos
+      - ${PWD}/temas/elinformador:/var/www/html/wp-content/themes/elinformador #Tema ya creado solo lo cargo para verificar funcionamiento
+      - ${PWD}/temas/DevWP:/var/www/html/wp-content/themes/DevWP #Tema para desarrollo este es en el que voy a trabajar
+#Fin Nueva Linea proyectos
+    ports:
+      - "8000:80"
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+volumes:
+  db_data: {}
+  wordpress_data: {}
